@@ -172,6 +172,10 @@ posix_spawn() does the equivalent of a fork()/execve(), and also allows some fd 
 pthread_create() creates a new thread.
 clone() is a Linux-specific call, which can be used to implement anything from fork() to pthread_create(). It gives a lot of control.
 
+
+An intrinsic function is a function available for use in a given programming language whose implementation is handled specially by the compiler. Typically, it substitutes a sequence of automatically generated instructions for the original function call, similar to an inline function. Unlike an inline function though, the compiler has an intimate knowledge of the intrinsic function and can therefore better integrate it and optimize it for the situation. This is also called builtin function in many languages. e.g.most standard library functions that the compiler can/will generate inline instead of calling an actual function in the library
+
+
 difference between new/delete and malloc/free
 // http://stackoverflow.com/questions/240212/what-is-the-difference-between-new-delete-and-malloc-free
 
@@ -243,3 +247,42 @@ void aligned_free(void *p ) {
     */
     free((void *)(*((size_t *) p-1)));
 }
+
+
+
+// the memcpy function is used to copy a block of data from a source address to a destination address. Below is its prototype.
+void memcpy(void* destination, const void* source, size_t num);
+// The idea is to simply typecast given addresses to char*. Then one by one copy data from source to destination.
+void memcpy(void* dest, void* src, size_t n) {
+    // typecast src and dest addresses to (char*)
+    char* csrc = (char*)src;
+    char* cdest = (char*)dest;
+    // copy contents of src[] to dest[]
+    for(int i = 0; i < n; i++) {
+        cdest[i] = csrc[i];
+    }
+}
+
+
+// memmove() is similar to memcpy() as it also copies data from a source to destination. memcpy() leads to problems when source and destination addresses overlap as memcpy() simply copies data one by one from one location to another.
+// use a temp array instead of directly copying from src to dest.
+
+void memmove(void* dest, void* src, size_t n) {
+    char* csrc = (char*)src;
+    char* cdest = (char*)dest;
+    char* temp = new char[n];
+
+    for(int i = 0; i < n; i++) {
+        temp[i] = csrc[i];
+    }
+    for(int i = 0; i < n; i++) {
+        cdest[i] = temp[i];
+    }
+    delete []temp;
+}
+
+
+
+
+
+stack &&&&&& heap!!!!!!!!
